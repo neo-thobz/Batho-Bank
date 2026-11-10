@@ -4,6 +4,12 @@ namespace BankingPayments.Domain.Entities;
 
 public class Payment
 {
+    public Guid Id { get; set; }
+
+    public Guid FromAccountId { get; set; }
+
+    public Guid ToAccountId { get; set; }
+
     public decimal Amount { get; set; }
 
     public string Currency { get; set; } = "ZAR";
