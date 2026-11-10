@@ -2,6 +2,9 @@ using BankingPayments.API.Contracts.Authentication;
 using BankingPayments.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+
 namespace BankingPayments.API.Controllers;
 
 [ApiController]
@@ -13,6 +16,17 @@ public class AuthController : ControllerBase
     public AuthController(IAuthService authService)
     {
         _authService = authService;
+    }
+    
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult GetCurrentUser()
+    {
+        return Ok(new
+        {
+            UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+            Email = User.FindFirstValue(ClaimTypes.Email)
+        });
     }
 
     [HttpPost("login")]
