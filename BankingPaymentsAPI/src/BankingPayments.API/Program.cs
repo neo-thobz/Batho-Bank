@@ -2,9 +2,11 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using BankingPayments.Application.Interfaces;
 using BankingPayments.Infrastructure.Identity;
 using BankingPayments.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BankingPayments.Infrastructure.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services
-    .AddIdentity<ApplicationUser, IdentityRole>()
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.DefaultLockoutTimeSpan =
+            TimeSpan.FromMinutes(15);
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -79,6 +87,9 @@ builder.Services
             ClockSkew = TimeSpan.FromSeconds(30)
         };
     });
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 builder.Services.AddAuthorization();
 
