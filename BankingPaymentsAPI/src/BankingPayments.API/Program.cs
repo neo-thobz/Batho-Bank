@@ -99,6 +99,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    await DevelopmentUserSeeder.SeedAsync(app.Services);
 }
 
 app.UseHttpsRedirection();
