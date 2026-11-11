@@ -1,1 +1,136 @@
-<p>login works!</p>
+
+<div class="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-12">
+
+  <div class="w-full max-w-md">
+
+    <!-- Branding -->
+    <div class="mb-8 text-center">
+      <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg">
+        <span class="text-3xl font-bold">B</span>
+      </div>
+
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+        BankingPayments
+      </h1>
+
+      <p class="mt-2 text-sm text-slate-500">
+        Secure Banking Portal
+      </p>
+    </div>
+
+    @if (currentUser(); as user) {
+
+      <!-- Authenticated state -->
+      <div class="rounded-2xl bg-white p-8 shadow-xl">
+
+        <div class="mb-6 text-center">
+          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-700">
+            ✓
+          </div>
+
+          <h2 class="text-xl font-bold text-slate-900">
+            Authentication successful!
+          </h2>
+
+          <p class="mt-2 text-sm text-slate-500">
+            Your account has been authenticated.
+          </p>
+        </div>
+
+        <h3 class="mb-2 font-semibold text-slate-700">
+          Response from /api/auth/me
+        </h3>
+
+        <pre class="overflow-x-auto rounded-lg bg-slate-900 p-4 text-xs text-green-400">{{ user | json }}</pre>
+
+        <div class="mt-6">
+          <app-button (click)="logout()">
+            Logout
+          </app-button>
+        </div>
+
+      </div>
+
+    } @else {
+
+      <!-- Login form -->
+      <div class="rounded-2xl bg-white p-8 shadow-xl">
+
+        <div class="mb-6">
+          <h2 class="text-xl font-bold text-slate-900">
+            Sign in to your account
+          </h2>
+
+          <p class="mt-1 text-sm text-slate-500">
+            Enter your credentials to continue.
+          </p>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="mb-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+          <div class="mb-5">
+            <label for="email" class="mb-2 block text-sm font-medium text-slate-700">
+              Email address
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="name@example.com"
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            />
+
+            @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
+              <p class="mt-1 text-xs text-red-600">
+                Please enter a valid email address.
+              </p>
+            }
+          </div>
+
+          <div class="mb-6">
+            <label for="password" class="mb-2 block text-sm font-medium text-slate-700">
+              Password
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            />
+
+            @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+              <p class="mt-1 text-xs text-red-600">
+                Password is required.
+              </p>
+            }
+          </div>
+
+          <app-button
+            type="submit"
+            [loading]="isLoading()"
+            [disabled]="loginForm.invalid"
+          >
+            Sign in
+          </app-button>
+
+        </form>
+
+      </div>
+
+    }
+
+    <p class="mt-6 text-center text-xs text-slate-400">
+      BankingPayments · Secure Authentication
+    </p>
+
+  </div>
+</div>

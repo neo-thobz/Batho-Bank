@@ -93,7 +93,20 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularDevelopment", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AngularDevelopment");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
