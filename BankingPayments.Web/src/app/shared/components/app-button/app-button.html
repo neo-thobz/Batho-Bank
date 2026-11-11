@@ -1,1 +1,13 @@
-<p>app-button works!</p>
+    <button
+      [type]="type()"
+      [disabled]="disabled() || loading()"
+      [class]="buttonClasses()"
+    >
+      @if (loading()) {
+        <span class="mr-2 inline-block animate-spin">
+          &#9696;
+        </span>
+      }
+
+      <ng-content />
+    </button>
